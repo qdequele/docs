@@ -1,0 +1,71 @@
+---
+title: Engine
+description: The changelog for the Meilisearch engine.
+---
+
+
+<Update label="2024-10-28" description="v1.11.0">
+
+## Breaking Changes
+- **AI-Powered Search API:**
+  - `hybrid.embedder` is now **mandatory** for both `GET` and `POST` `/indexes/{:indexUid}/search` and `/similar` endpoints.
+  - The `hybrid` parameter must be included even for pure semantic searches.
+  - `semanticRatio` is ignored when `vector` is used without `q`, resulting in pure semantic searches.
+
+## New Features & Improvements
+- **AI-Powered Search Enhancements:**
+  - Updated default OpenAI model to `text-embedding-3-small`.
+  - Introduced `documentTemplateMaxBytes` to limit the size of document templates.
+  - Added `field.is_searchable` property in `documentTemplate` for better field filtering.
+
+- **Vector Database Performance:**
+  - **`binaryQuantized` Embedder Option:**
+    - Converts embeddings to boolean values (`1` or `-1`), reducing database size by 10x and indexing time by 6x.
+    - **Note:** Irreversible change that may affect search relevancy. Recommended to test on a smaller or duplicate index first.
+
+- **Federated Search Enhancements:**
+  - Added `facetsByIndex` to retrieve facet distributions and stats per index.
+  - Introduced `mergeFacets` to combine facet data across multiple indexes.
+
+- **Experimental Features:**
+  - **`STARTS WITH` Filter Operator:**
+    - Enable via the experimental features API.
+    - Use in filters, e.g., `"filter": "hero STARTS WITH spider"`.
+    - Feedback encouraged through the [GitHub discussion](https://github.com/orgs/meilisearch/discussions/763).
+
+- **Language Support:**
+  - Enhanced support with ISO-639-1 and ISO-639-3 variants.
+  - Added German tokenizer and improved Turkish language support.
+
+- **UI & Logging:**
+  - Updated search UI by removing forced capitalization of fields.
+  - Upgraded "batch failed" logs to error level.
+
+## Bug Fixes
+- **Federated Search:**
+  - Fixed issue where `query.facets` was ignored, now returns appropriate errors and requires `federation.facetsByIndex`.
+
+- **Metrics & Logging:**
+  - Corrected Prometheus `/metrics` to return real route patterns instead of route templates.
+
+- **Facet Handling:**
+  - Improved truncation logic for facet values to ensure correct values are retained based on `maxValuesPerFacet`.
+
+- **Task Management:**
+  - Enhanced task cancellation processes when using vectors.
+
+- **Language Specific Fixes:**
+  - Resolved character normalization issues for Swedish (`å`, `ä`, `ö` are no longer normalized to `a` and `o`).
+
+- **Document Updates:**
+  - Fixed internal errors related to updating documents with functions.
+  - Prevented sending empty edit documents by function.
+
+- **Search Queue & Vectors:**
+  - Fixed incorrect search queue sizing in experimental search features.
+  - Ensured vectors are displayed correctly when no custom vectors are provided.
+
+---
+
+*Contributors: @dureuill, @irevoire, @Kerollmops, @ManyTheFish, @luflow, @tkhsht
+</Update>

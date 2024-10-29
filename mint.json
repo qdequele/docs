@@ -57,6 +57,10 @@
       "name": "API References",
       "url": "api-references",
       "openapi": "/references/api-references/meilisearch-openapi-source.yaml"
+    },
+    {
+      "name": "Changelog",
+      "url": "changelog"
     }
   ],
   "anchors": [],
@@ -147,6 +151,17 @@
         {
           "group": "Support",
           "pages": ["documentation/plateform/support/overview"]
+        }
+      ]
+    },
+    {
+      "group": "Changelog",
+      "pages": [
+        "changelog/engine",
+        "changelog/cloud",
+        {
+          "group": "SDKs",
+          "pages": ["changelog/sdks/javascript"]
         }
       ]
     }

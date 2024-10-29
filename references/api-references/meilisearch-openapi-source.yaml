@@ -1560,7 +1560,7 @@ components:
         type: indexSwap
         enqueuedAt: "2021-01-01T09:39:00.000000Z"
   securitySchemes:
-    bearerAuth: # arbitrary name for the security scheme
+    apiKey: # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
