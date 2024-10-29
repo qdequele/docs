@@ -1559,6 +1559,11 @@ components:
         status: enqueued
         type: indexSwap
         enqueuedAt: "2021-01-01T09:39:00.000000Z"
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
 tags:
   - name: Indexes
     description: |
@@ -1619,77 +1624,10 @@ tags:
     description: |
       The `experimental-features` endpoint allows enabling and disabling [experimental features](https://github.com/meilisearch/engine-team/blob/main/resources/experimental-features.md) at runtime.
       Experimental features are features that are not yet covered by [Meilisearch's stability guarantee](https://github.com/meilisearch/engine-team/blob/main/resources/versioning-policy.md) and that could break between minor and patch Meilisearch versions.
+  - name: Other
+    description: |
+      Other routes that do not fit in the other categories.
 paths:
-  /dumps:
-    post:
-      operationId: dumps.create
-      summary: Create a Dump
-      description: |
-        Triggers a dump creation process. Once the process is complete, a dump is created in the [dump directory](https://docs.meilisearch.com/reference/features/configuration.html#dump-directory). If the dump directory does not exist yet, it will be created.
-      tags:
-        - Dumps
-      security:
-        - apiKey: []
-      responses:
-        "202":
-          description: Accepted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/202"
-              examples:
-                "202":
-                  $ref: "#/components/examples/202_dumpCreation"
-        "401":
-          $ref: "#/components/responses/401"
-  /snapshots:
-    post:
-      operationId: snapshots.create
-      summary: Create a Snapshot
-      description: |
-        Triggers a snapshot creation process. Once the process is complete, a snapshot is created in the snapshot directory. If the snapshot directory does not exist yet, it will be created.
-      tags:
-        - Snapshots
-      security:
-        - apiKey: []
-      responses:
-        "202":
-          description: Accepted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/202"
-              examples:
-                "202":
-                  $ref: "#/components/examples/202_snapshotCreation"
-        "401":
-          $ref: "#/components/responses/401"
-  /health:
-    get:
-      operationId: health.check
-      summary: Get health
-      description: Get health of the Meilisearch instance.
-      tags:
-        - Health
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum:
-                      - available
-                required:
-                  - status
-              examples:
-                "200":
-                  value:
-                    status: available
-      x-internal: false
   /indexes:
     get:
       operationId: indexes.list
@@ -2342,6 +2280,63 @@ paths:
         - $ref: "#/components/parameters/Content-Type"
     parameters:
       - $ref: "#/components/parameters/indexUid"
+  /multi-search:
+    post:
+      operationId: multi_search
+      summary: Multi Search
+      description: |
+        Make multiple search queries in a single HTTP request.
+
+        The queries can span different indexes or lookup the results of different filters on the same index. Each query has its own results set.
+      tags:
+        - Search
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                queries:
+                  type: array
+                  description: Array of the search queries to be performed.
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      indexUid:
+                        type: string
+                        description: The unique identifier of the index to be searched.
+                      $ref: "#/components/schemas/searchQuery/properties"
+                    required:
+                      - indexUid
+              required:
+                - queries
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        indexUid:
+                          type: string
+                          description: The unique identifier of the searched index.
+                        $ref: "#/components/schemas/searchResponse/properties"
+        "401":
+          $ref: "#/components/responses/401"
+      parameters:
+        - $ref: "#/components/parameters/Content-Type"
   "/indexes/{indexUid}/settings":
     get:
       operationId: indexes.settings.get
@@ -3425,63 +3420,157 @@ paths:
           description: Not Found
     parameters:
       - $ref: "#/components/parameters/indexUid"
-  /multi-search:
-    post:
-      operationId: multi_search
-      summary: Multi Search
-      description: |
-        Make multiple search queries in a single HTTP request.
-
-        The queries can span different indexes or lookup the results of different filters on the same index. Each query has its own results set.
+  "/tasks":
+    get:
+      summary: Get all tasks
+      description: "Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)"
       tags:
-        - Search
-      security:
-        - apiKey: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties: false
-              properties:
-                queries:
-                  type: array
-                  description: Array of the search queries to be performed.
-                  items:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      indexUid:
-                        type: string
-                        description: The unique identifier of the index to be searched.
-                      $ref: "#/components/schemas/searchQuery/properties"
-                    required:
-                      - indexUid
-              required:
-                - queries
+        - Tasks
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
                 type: object
-                additionalProperties: false
                 properties:
                   results:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        indexUid:
-                          type: string
-                          description: The unique identifier of the searched index.
-                        $ref: "#/components/schemas/searchResponse/properties"
+                      $ref: "#/components/schemas/task"
+                  total:
+                    $ref: "#/components/schemas/total"
+                  limit:
+                    $ref: "#/components/schemas/limit"
+                  from:
+                    $ref: "#/components/schemas/from"
+                  next:
+                    $ref: "#/components/schemas/next"
+                required:
+                  - results
+                  - total
+                  - limit
+                  - from
+                  - next
+      operationId: tasks.list
+      parameters:
+        - $ref: "#/components/parameters/total"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/from"
+        - $ref: "#/components/parameters/taskFilterUids"
+        - $ref: "#/components/parameters/taskFilterIndexUids"
+        - $ref: "#/components/parameters/taskFilterStatuses"
+        - $ref: "#/components/parameters/taskFilterTypes"
+        - $ref: "#/components/parameters/taskFilterCanceledBy"
+        - $ref: "#/components/parameters/taskFilterBeforeEnqueuedAt"
+        - $ref: "#/components/parameters/taskFilterAfterEnqueuedAt"
+        - $ref: "#/components/parameters/taskFilterBeforeStartedAt"
+        - $ref: "#/components/parameters/taskFilterAfterStartedAt"
+        - $ref: "#/components/parameters/taskFilterBeforeFinishedAt"
+        - $ref: "#/components/parameters/taskFilterAfterFinishedAt"
+      security:
+        - apiKey: []
+    delete:
+      summary: Delete tasks
+      description: "Delete finished [tasks](https://docs.meilisearch.com/lean/advanced/asynchronous_operations.html)"
+      tags:
+        - Tasks
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/summarizedTask"
+              examples:
+                "202":
+                  $ref: "#/components/examples/202_taskDeletion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      operationId: tasks.delete
+      parameters:
+        - $ref: "#/components/parameters/taskFilterUids"
+        - $ref: "#/components/parameters/taskFilterIndexUids"
+        - $ref: "#/components/parameters/taskFilterStatuses"
+        - $ref: "#/components/parameters/taskFilterTypes"
+        - $ref: "#/components/parameters/taskFilterCanceledBy"
+        - $ref: "#/components/parameters/taskFilterBeforeEnqueuedAt"
+        - $ref: "#/components/parameters/taskFilterAfterEnqueuedAt"
+        - $ref: "#/components/parameters/taskFilterBeforeStartedAt"
+        - $ref: "#/components/parameters/taskFilterAfterStartedAt"
+        - $ref: "#/components/parameters/taskFilterBeforeFinishedAt"
+        - $ref: "#/components/parameters/taskFilterAfterFinishedAt"
+      security:
+        - apiKey: []
+  "/tasks/:taskUid":
+    get:
+      summary: Get a task
+      description: "Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) "
+      tags:
+        - Tasks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/task"
         "401":
           $ref: "#/components/responses/401"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      operationId: tasks.get
       parameters:
-        - $ref: "#/components/parameters/Content-Type"
+        - $ref: "#/components/parameters/taskUid"
+      security:
+        - apiKey: []
+  "/tasks/cancel":
+    post:
+      summary: Cancel tasks
+      description: "Cancel enqueued and/or processing [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) "
+      tags:
+        - Tasks
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/summarizedTask"
+              examples:
+                "202":
+                  $ref: "#/components/examples/202_taskCancelation"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "401":
+          $ref: "#/components/responses/401"
+      operationId: tasks.cancel
+      parameters:
+        - $ref: "#/components/parameters/taskFilterUids"
+        - $ref: "#/components/parameters/taskFilterIndexUids"
+        - $ref: "#/components/parameters/taskFilterStatuses"
+        - $ref: "#/components/parameters/taskFilterTypes"
+        - $ref: "#/components/parameters/taskFilterCanceledBy"
+        - $ref: "#/components/parameters/taskFilterBeforeEnqueuedAt"
+        - $ref: "#/components/parameters/taskFilterAfterEnqueuedAt"
+        - $ref: "#/components/parameters/taskFilterBeforeStartedAt"
+        - $ref: "#/components/parameters/taskFilterAfterStartedAt"
+        - $ref: "#/components/parameters/taskFilterBeforeFinishedAt"
+        - $ref: "#/components/parameters/taskFilterAfterFinishedAt"
+      security:
+        - apiKey: []
   /keys:
     get:
       operationId: keys.list
@@ -3731,7 +3820,7 @@ paths:
       summary: Get version of Meilisearch
       description: Get version of Meilisearch.
       tags:
-        - Version
+        - Other
       security:
         - apiKey: []
       responses:
@@ -3758,157 +3847,6 @@ paths:
                   - pkgVersion
         "401":
           $ref: "#/components/responses/401"
-  /tasks:
-    get:
-      summary: Get all tasks
-      description: "Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)"
-      tags:
-        - Tasks
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/task"
-                  total:
-                    $ref: "#/components/schemas/total"
-                  limit:
-                    $ref: "#/components/schemas/limit"
-                  from:
-                    $ref: "#/components/schemas/from"
-                  next:
-                    $ref: "#/components/schemas/next"
-                required:
-                  - results
-                  - total
-                  - limit
-                  - from
-                  - next
-      operationId: tasks.list
-      parameters:
-        - $ref: "#/components/parameters/total"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/from"
-        - $ref: "#/components/parameters/taskFilterUids"
-        - $ref: "#/components/parameters/taskFilterIndexUids"
-        - $ref: "#/components/parameters/taskFilterStatuses"
-        - $ref: "#/components/parameters/taskFilterTypes"
-        - $ref: "#/components/parameters/taskFilterCanceledBy"
-        - $ref: "#/components/parameters/taskFilterBeforeEnqueuedAt"
-        - $ref: "#/components/parameters/taskFilterAfterEnqueuedAt"
-        - $ref: "#/components/parameters/taskFilterBeforeStartedAt"
-        - $ref: "#/components/parameters/taskFilterAfterStartedAt"
-        - $ref: "#/components/parameters/taskFilterBeforeFinishedAt"
-        - $ref: "#/components/parameters/taskFilterAfterFinishedAt"
-      security:
-        - apiKey: []
-    delete:
-      summary: Delete tasks
-      description: "Delete finished [tasks](https://docs.meilisearch.com/lean/advanced/asynchronous_operations.html)"
-      tags:
-        - Tasks
-      responses:
-        "202":
-          description: Accepted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/summarizedTask"
-              examples:
-                "202":
-                  $ref: "#/components/examples/202_taskDeletion"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-      operationId: tasks.delete
-      parameters:
-        - $ref: "#/components/parameters/taskFilterUids"
-        - $ref: "#/components/parameters/taskFilterIndexUids"
-        - $ref: "#/components/parameters/taskFilterStatuses"
-        - $ref: "#/components/parameters/taskFilterTypes"
-        - $ref: "#/components/parameters/taskFilterCanceledBy"
-        - $ref: "#/components/parameters/taskFilterBeforeEnqueuedAt"
-        - $ref: "#/components/parameters/taskFilterAfterEnqueuedAt"
-        - $ref: "#/components/parameters/taskFilterBeforeStartedAt"
-        - $ref: "#/components/parameters/taskFilterAfterStartedAt"
-        - $ref: "#/components/parameters/taskFilterBeforeFinishedAt"
-        - $ref: "#/components/parameters/taskFilterAfterFinishedAt"
-      security:
-        - apiKey: []
-  "/tasks/:taskUid":
-    get:
-      summary: Get a task
-      description: "Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) "
-      tags:
-        - Tasks
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/task"
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-      operationId: tasks.get
-      parameters:
-        - $ref: "#/components/parameters/taskUid"
-      security:
-        - apiKey: []
-  "/tasks/cancel":
-    post:
-      summary: Cancel tasks
-      description: "Cancel enqueued and/or processing [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) "
-      tags:
-        - Tasks
-      responses:
-        "202":
-          description: Accepted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/summarizedTask"
-              examples:
-                "202":
-                  $ref: "#/components/examples/202_taskCancelation"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-        "401":
-          $ref: "#/components/responses/401"
-      operationId: tasks.cancel
-      parameters:
-        - $ref: "#/components/parameters/taskFilterUids"
-        - $ref: "#/components/parameters/taskFilterIndexUids"
-        - $ref: "#/components/parameters/taskFilterStatuses"
-        - $ref: "#/components/parameters/taskFilterTypes"
-        - $ref: "#/components/parameters/taskFilterCanceledBy"
-        - $ref: "#/components/parameters/taskFilterBeforeEnqueuedAt"
-        - $ref: "#/components/parameters/taskFilterAfterEnqueuedAt"
-        - $ref: "#/components/parameters/taskFilterBeforeStartedAt"
-        - $ref: "#/components/parameters/taskFilterAfterStartedAt"
-        - $ref: "#/components/parameters/taskFilterBeforeFinishedAt"
-        - $ref: "#/components/parameters/taskFilterAfterFinishedAt"
-      security:
-        - apiKey: []
   "/swap-indexes":
     post:
       operationId: indexes.swap
@@ -4029,7 +3967,6 @@ paths:
       summary: (EXPERIMENTAL) Get prometheus format metrics for observability and monitoring
       description: "See [technical specification](https://github.com/meilisearch/specifications/blob/main/text/0174-metrics-api.md)"
       tags:
-        - Stats
         - Experimental
       responses:
         "200":
@@ -4042,4 +3979,75 @@ paths:
       parameters: []
       security:
         - apiKey: []
-security: []
+  /snapshots:
+    post:
+      operationId: snapshots.create
+      summary: Create a Snapshot
+      description: |
+        Triggers a snapshot creation process. Once the process is complete, a snapshot is created in the snapshot directory. If the snapshot directory does not exist yet, it will be created.
+      tags:
+        - Other
+      security:
+        - apiKey: []
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/202"
+              examples:
+                "202":
+                  $ref: "#/components/examples/202_snapshotCreation"
+        "401":
+          $ref: "#/components/responses/401"
+  /dumps:
+    post:
+      operationId: dumps.create
+      summary: Create a Dump
+      description: |
+        Triggers a dump creation process. Once the process is complete, a dump is created in the [dump directory](https://docs.meilisearch.com/reference/features/configuration.html#dump-directory). If the dump directory does not exist yet, it will be created.
+      tags:
+        - Other
+      security:
+        - apiKey: []
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/202"
+              examples:
+                "202":
+                  $ref: "#/components/examples/202_dumpCreation"
+        "401":
+          $ref: "#/components/responses/401"
+  /health:
+    get:
+      operationId: health.check
+      summary: Get health
+      description: Get health of the Meilisearch instance.
+      tags:
+        - Other
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - available
+                required:
+                  - status
+              examples:
+                "200":
+                  value:
+                    status: available
+      x-internal: false
+security: 
+  - bearerAuth: [] # use the same name as above
