@@ -52,11 +52,13 @@
     {
       "name": "Documentation",
       "url": "documentation"
+    },
+    {
+      "name": "API References",
+      "url": "api-references",
+      "openapi": "/references/api-references/meilisearch-openapi-source.yaml"
     }
   ],
-  "primaryTab": {
-    "name": "Documentation"
-  },
   "anchors": [],
   "navigation": [
     {
