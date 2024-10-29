@@ -1,0 +1,137 @@
+---
+title: "Principles"
+description: "Meilisearch is built on a set of core principles that shape our product and guide our development."
+---
+
+# **Philosophy**
+
+At Meilisearch, we're driven by a set of core principles that shape our product and guide our development. These principles ensure that Meilisearch remains a powerful, yet accessible search solution for developers and end-users alike.
+
+## Simplicity and intuitiveness
+
+From day one, our primary focus has been to provide a simple and intuitive experience. We believe that powerful search capabilities shouldn't come at the cost of complexity. This philosophy extends to both our API design for developers and the search experience for end-users.
+
+## Ultra-relevant search results
+
+While ease of use is crucial, we never compromise on the quality of search results. Meilisearch employs a sophisticated ranking system that ensures highly relevant results:
+
+- Our default ranking rules are designed to work well for most use cases, developed through direct collaboration with our users.
+- We offer extensive customization options, allowing you to fine-tune search parameters and create a search experience tailored to your specific needs.
+
+## Lightning-fast responses
+
+We're committed to providing an exceptional search-as-you-type experience with response times under 50 milliseconds. This speed holds true whether you're developing a website, mobile app, or any other type of application. Our dedication to prefix search technology helps make this possible, allowing end-users to find what they're looking for quickly and efficiently.
+
+## Flexible data handling
+
+While Meilisearch is incredibly powerful, it's important to understand its role in your tech stack:
+
+- Meilisearch is designed as a search engine, not a primary database.
+- We recommend including only the data necessary for search operations.
+- For optimal performance and relevancy, make non-search-related fields non-searchable.
+
+## AI-powered search capabilities
+
+Embracing the latest advancements in search technology, we've integrated AI-powered features like semantic search and hybrid search. These capabilities allow Meilisearch to understand user intent beyond exact keyword matches, providing even more relevant results.
+
+## Scalability and performance
+
+As your data grows, so does Meilisearch. We've designed our system to handle both small and large datasets efficiently, ensuring that performance remains top-notch regardless of scale.
+
+## Developer-friendly
+
+We prioritize the developer experience by providing:
+
+- A RESTful API that's easy to integrate
+- SDKs for popular programming languages
+- Comprehensive documentation and guides
+- An active community for support and collaboration
+
+## Continuous improvement
+
+We're constantly evolving Meilisearch based on user feedback and technological advancements. Our commitment to improvement ensures that Meilisearch remains at the forefront of search engine technology.
+
+# Key Principles
+
+Before diving into Meilisearch, it's important to understand some fundamental principles that govern how it operates. These concepts will help you effectively use Meilisearch in your projects.
+
+## Unstructured data and schema-less design
+
+Meilisearch is designed to work with unstructured data and does not require a predefined schema. This flexibility offers several advantages:
+
+- **Automatic type detection**: Meilisearch automatically detects the type of new fields as they are added.
+- **Adaptability**: Perfect for applications syncing data from structured or unstructured databases, or other sources like crawled web pages.
+- **Easy integration**: Simplifies the process of adding new data sources or modifying existing ones without schema updates.
+
+## Primary key and document identification
+
+The primary key is a crucial concept in Meilisearch:
+
+- **Definition**: The primary key is a special field that must be present in all documents within an index.
+- **Uniqueness**: It ensures that no two documents in an index can be exactly identical.
+- **Document ID**: The value associated with the primary key serves as the document ID, uniquely identifying each document.
+
+### Key points about primary keys:
+
+- Every index must have a primary key shared across all documents.
+- If even one document in a batch is missing the primary key, no documents in that batch will be stored.
+- Two documents can have the same values for all attributes except the primary key.
+- Documents with the same ID in an index are treated as the same document, with the newer version overwriting the older one.
+
+### Automatic primary key detection:
+
+If you don't explicitly set a primary key, Meilisearch will attempt to automatically detect one:
+
+- It looks for an attribute ending with "id" (case-insensitive) in the first document of a batch.
+- If multiple "id" attributes are found or no suitable attribute is detected, Meilisearch will throw an error.
+- In case of an error, no documents will be added to the index.
+
+## Asynchronous task processing
+
+Meilisearch uses an asynchronous task system for resource-intensive operations:
+
+1. **Task creation**: When you initiate an operation, Meilisearch creates a task and adds it to the queue.
+2. **Queue processing**: Tasks are processed in the order they were added to the queue.
+3. **Status updates**: You can monitor task status through the Meilisearch Cloud interface or API.
+
+### Task lifecycle:
+
+1. **Enqueued**: Task is created and added to the queue. Status: `enqueued`
+2. **Processing**: Task reaches the front of the queue and Meilisearch begins working on it. Status: `processing`
+3. **Completion**: Task is finished. Status: `succeeded` if successful, `failed` if an error occurred
+
+This asynchronous approach allows Meilisearch to handle resource-intensive tasks without causing downtime for users.
+
+## API keys and security
+
+Meilisearch uses a system of API keys to manage access and permissions. Understanding this system is crucial for maintaining the security of your Meilisearch project.
+
+### Types of keys
+
+When you start a new project, Meilisearch provides you with three types of keys:
+
+1. **Master key**: This key has full power over everything in your project. It should be used with extreme caution.
+2. **Default Search API Key**: Used for search operations.
+3. **Default Admin API Key**: Used for administrative tasks like configuring index settings and managing documents.
+
+### Key usage guidelines
+
+- **Master key**:
+  - Use only for creating, updating, and deleting API keys.
+  - Never use it for other operations as it could be dangerous.
+  - Cannot be configured or listed through the `/keys` endpoints.
+- **API keys**:
+  - Use for all API operations except API key management.
+  - Grant access to specific indexes, routes, and endpoints.
+  - Can be configured to expire after a certain date.
+  - Managed through the `/keys` route.
+
+### Best practices
+
+- Use the `Default Search API key` for search operations in your application.
+- Use the `Default Admin API Key` for index configuration, document management, and other administrative tasks.
+- Create custom API keys with limited permissions for specific use cases to enhance security.
+- Regularly rotate your API keys to maintain security.
+- Never expose your Master key or Admin API key in client-side code or public repositories.
+
+By following these principles for API key usage, you can ensure that your Meilisearch project remains secure while still providing the necessary access for various operations.

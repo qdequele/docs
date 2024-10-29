@@ -1,91 +1,205 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Meilisearch Documentation",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/meilisearch-logo-dark.svg",
+    "light": "/logo/meilisearch-logo-light.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#FF5CB2",
+    "light": "#FF5CB2",
+    "dark": "#FF5CB2",
+    "background": {
+      "light": "#F7F7F7",
+      "dark": "#1A003B"
+    },
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#FF5CB2",
+      "to": "#FF5CB2"
     }
   },
+  "layout": "topnav",
+  "background": {
+    "style": "gradient"
+  },
+  "sidebar": {
+    "items": "container"
+  },
+  "topbar": {
+    "style": "default"
+  },
+  "search": {
+    "location": "top"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "versions": ["v1.10.0"],
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:support@meilisearch.com"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://cloud.meilisearch.com"
   },
   "tabs": [
     {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
-  "anchors": [
-    {
       "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "url": "documentation"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "name": "References",
+      "url": "references"
     }
   ],
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "anchors": [],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Getting Started",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "documentation/getting-started/features",
+        "documentation/getting-started/principles",
+        "documentation/getting-started/first-project",
+        {
+          "group": "SDKs",
+          "pages": ["documentation/getting-started/sdks/javascript"]
+        },
+        {
+          "group": "Frameworks",
+          "pages": [
+            "documentation/getting-started/frameworks/rails",
+            "documentation/getting-started/frameworks/laravel"
+          ]
+        },
+        {
+          "group": "Other tooling",
+          "pages": ["documentation/getting-started/other-tooling/vercel"]
+        }
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Products",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        {
+          "group": "Keyword search",
+          "pages": ["documentation/products/keyword-search/overview"]
+        },
+        {
+          "group": "AI search",
+          "pages": ["documentation/products/ai-search/overview"]
+        },
+        {
+          "group": "Faceted search",
+          "pages": ["documentation/products/faceted-search/overview"]
+        },
+        {
+          "group": "Multi-search",
+          "pages": ["documentation/products/multi-search/overview"]
+        },
+        {
+          "group": "Geo-search",
+          "pages": ["documentation/products/geo-search/overview"]
+        },
+        {
+          "group": "Document database",
+          "pages": ["documentation/products/document-database/overview"]
+        },
+        {
+          "group": "Vector database",
+          "pages": ["documentation/products/vector-database/overview"]
+        }
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Platform",
       "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        {
+          "group": "Analytics",
+          "pages": ["documentation/plateform/analytics/overview"]
+        },
+        {
+          "group": "Crawler",
+          "pages": ["documentation/plateform/crawler/overview"]
+        },
+        {
+          "group": "Security and keys",
+          "pages": ["documentation/plateform/security-and-keys/overview"]
+        },
+        {
+          "group": "Tasks",
+          "pages": ["documentation/plateform/tasks/overview"]
+        },
+        {
+          "group": "Infrastructure",
+          "pages": ["documentation/plateform/infrastructure/overview"]
+        },
+        {
+          "group": "Pricing",
+          "pages": ["documentation/plateform/pricing/overview"]
+        },
+        {
+          "group": "Support",
+          "pages": ["documentation/plateform/support/overview"]
+        }
       ]
     }
   ],
-  "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+  "footer": {
+    "socials": {
+      "x": "https://x.com/meilisearch",
+      "github": "https://github.com/meilisearch",
+      "linkedin": "https://www.linkedin.com/company/meilisearch",
+      "website": "https://www.meilisearch.com"
+    },
+    "links": [
+      {
+        "title": "Contact us",
+        "links": [
+          { "label": "Github", "url": "https://github.com/meilisearch" },
+          { "label": "Discord", "url": "https://discord.meilisearch.com/" },
+          {
+            "label": "Newsletter",
+            "url": "https://share-eu1.hsforms.com/1LN5N0x_GQgq7ss7tXmSykwfg3aq"
+          },
+          {
+            "label": "Helpdesk",
+            "url": "https://help.meilisearch.com/"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          { "label": "Blog", "url": "https://meilisearch.com/blog" },
+          { "label": "Careers", "url": "https://www.meilisearch.com/careers" },
+          { "label": "Swag store", "url": "https://swag.meilisearch.com/" },
+          {
+            "label": "Customers",
+            "url": "https://www.meilisearch.com/customers"
+          },
+          {
+            "label": "Code of condct",
+            "url": "https://github.com/meilisearch/MeiliSearch/blob/main/CODE_OF_CONDUCT.md"
+          },
+          {
+            "label": "Privacy Policy",
+            "url": "https://www.meilisearch.com/privacy-policy"
+          },
+          {
+            "label": "Terms of Use",
+            "url": "https://www.meilisearch.com/terms-of-use"
+          }
+        ]
+      }
+    ]
   }
 }

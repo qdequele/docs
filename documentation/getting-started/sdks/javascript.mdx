@@ -1,0 +1,137 @@
+---
+title: "JavaScript"
+description: "Let's get started with Meilisearch JavaScript SDK"
+---
+
+<Steps>
+  <Step title="Install Meilisearch">
+  We recommend installing `meilisearch-js` in your project with your package manager of choice.
+
+    <CodeGroup>
+
+    ```sh NPM
+    npm install meilisearch
+    ```
+
+    ```sh Yarn
+    yarn add meilisearch
+    ```
+
+    ```sh pnpm
+    pnpm add meilisearch
+    ```
+    </CodeGroup>
+
+    `meilisearch-js` officially supports `node` versions `>=` 14 and `<=` 18.
+
+    Instead of using a package manager, you may also import the library directly into your [HTML via a CDN](#include-script-tag).
+
+  </Step>
+  <Step title="Import Meilisearch">
+  After installing `meilisearch-js`, you must import it into your application. There are many ways of doing that depending on your development environment.
+
+    <CodeGroup>
+
+    ```js ES Modules
+    import { MeiliSearch } from 'meilisearch'
+
+    const client = new MeiliSearch({
+        host: 'https://cloud.meilisearch.com',
+        apiKey: 'masterKey',
+    })
+    ```
+
+    ```js CommonJS
+    const { MeiliSearch } = require('meilisearch')
+
+    const client = new MeiliSearch({
+        host: 'https://cloud.meilisearch.com',
+        apiKey: 'masterKey',
+    })
+    ```
+
+    ```js HTML via CDN
+    <script src="https://cdn.jsdelivr.net/npm/meilisearch@latest/dist/bundles/meilisearch.umd.js"></script>
+
+    <script>
+    const client = new MeiliSearch({
+        host: 'https://cloud.meilisearch.com',
+        apiKey: 'masterKey',
+    })
+    </script>
+    ```
+
+    ```js Deno
+    import { MeiliSearch } from "https://esm.sh/meilisearch"
+
+    const client = new MeiliSearch({
+        host: 'https://cloud.meilisearch.com',
+        apiKey: 'masterKey',
+    })
+    ```
+    </CodeGroup>
+
+  </Step>
+  <Step title="Add documents">
+  ```js Add documents
+const { MeiliSearch } = require('meilisearch')
+
+;(async () => {
+const client = new MeiliSearch({
+host: 'https://cloud.meilisearch.com',
+apiKey: 'masterKey',
+})
+
+// An index is where the documents are stored.
+const index = client.index('movies')
+
+const documents = [
+{ id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
+{ id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
+{ id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
+{ id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
+{ id: 5, title: 'Moana', genres: ['Fantasy', 'Action']},
+{ id: 6, title: 'Philadelphia', genres: ['Drama'] },
+]
+
+// If the index 'movies' does not exist, Meilisearch creates it when you first add the documents.
+let response = await index.addDocuments(documents)
+
+console.log(response) // => { "uid": 0 }
+})()
+
+````
+
+Tasks such as document addition always return a unique identifier. You can use this identifier `taskUid` to check the status (`enqueued`, `canceled`, `processing`, `succeeded` or `failed`) of a [task](https://www.meilisearch.com/docs/reference/api/tasks).
+
+  </Step>
+  <Step title="Search for documents">
+  `meilisearch-js` supports all [search parameters](https://www.meilisearch.com/docs/reference/api/search#search-parameters) described in our main documentation website.
+
+  ```javascript
+// Meilisearch is typo-tolerant:
+const search = await index.search('philoudelphia')
+console.log(search)
+````
+
+Output:
+
+```json
+{
+  "hits": [
+    {
+      "id": "6",
+      "title": "Philadelphia",
+      "genres": ["Drama"]
+    }
+  ],
+  "offset": 0,
+  "limit": 20,
+  "estimatedTotalHits": 1,
+  "processingTimeMs": 1,
+  "query": "philoudelphia"
+}
+```
+
+  </Step>
+</Steps>

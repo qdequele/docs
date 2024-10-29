@@ -1,0 +1,92 @@
+---
+title: "First project"
+description: "Learn how to create your first Meilisearch Cloud project."
+---
+
+This tutorial walks you through setting up [Meilisearch Cloud](https://cloud.meilisearch.com), creating a project and an index, adding documents to it, and performing your first search with the default web interface.
+
+You need a Meilisearch Cloud account to follow along. If you don't have one, register for a 14-day free trial account at https://cloud.meilisearch.com/register.
+
+<iframe
+  width="560"
+  height="315"
+  src="https://youtu.be/KK2rV7i4IdI"
+  title="Getting started with Meilisearch Cloud"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowFullScreen
+></iframe>
+
+## Creating a project
+
+To use Meilisearch Cloud, you must first create a project. Projects act as containers for indexes, tasks, billing, and other information related to Meilisearch Cloud.
+
+Click the "New project" button on the top menu. If you have a free trial account and this is your first project, the button will read "Start free trial" instead:
+
+![New project](/documentation/getting-started/first-project/1-new-project.avif)
+
+Name your project `meilisearch-quick-start` and select the region closest to you, then click on "Create project":
+
+![Create project](/documentation/getting-started/first-project/2-create-project.avif)
+
+If you are not using a free trial account, you must also choose a billing plan based on the size of your dataset and number of searches per month:
+
+![Project billing](/documentation/getting-started/first-project/3-project-billing.avif)
+
+Creating your project might take a few minutes. Check the project list to follow its status. Once the project is ready, click on its name to go to the project overview page:
+
+![Project list](/documentation/getting-started/first-project/4-project-list.avif)
+
+# **Creating an index and adding documents**
+
+After creating your project, you must index the data you want to search. Meilisearch stores and processes data you add to it in indexes. A single project may contain multiple indexes.
+
+First, click on the indexes tab in the project page menu:
+
+![Project page menu](/documentation/getting-started/first-project/5-project-page-menu-indexes.avif)
+
+This leads you to the index listing. Click on "Create an index":
+
+![Index list empty](/documentation/getting-started/first-project/6-index-list-empty.avif)
+
+Write `movies` in the name field and click on "Create Index":
+
+![Create index](/documentation/getting-started/first-project/7-create-index.avif)
+
+The final step in creating an index is to add data to it. Choose "File upload":
+
+![File upload](/documentation/getting-started/first-project/8-file-upload.avif)
+
+Meilisearch Cloud will ask you for your dataset. To follow along with this tutorial, use this [list of movies](https://www.meilisearch.com/movies.json). Download the file to your computer, drag and drop it into the specified area, then click on "Import documents":
+
+[list of movies](https://www.meilisearch.com/movies.json)
+
+![Data import](/documentation/getting-started/first-project/9-data-import.avif)
+
+Meilisearch Cloud will index your documents. This may take a moment. Click on "See index list" and wait. Once it is done, click on "Settings" to visit the index overview:
+
+![Index list filled](/documentation/getting-started/first-project/10-index-list-filled.avif)
+
+# **Searching**
+
+With all data uploaded and processed, the last step is to run a few test searches to confirm Meilisearch is running as expected.
+
+Click on the project name on the breadcrumb menu to return to the project overview:
+
+![Index list breadcrumb](/documentation/getting-started/first-project/11-index-list-breadcrumb.avif)
+
+Meilisearch Cloud comes with a search preview interface. Click on "Search preview" to access it:
+
+![Project page URL](/documentation/getting-started/first-project/12-project-page-url.avif)
+
+Finally, try searching for a few movies, like "Solaris":
+
+![Search preview](/documentation/getting-started/first-project/13-search-preview.avif)
+
+If you can see the results coming in as you type, congratulations: you now know all the basic steps to using Meilisearch Cloud.
+
+# **What's next**
+
+This tutorial taught you how to use Meilisearch Cloud's interface to create a project, add an index to it, and use the search preview interface.
+
+In most real-life settings, you will be creating your own search interface and retrieving results through Meilisearch's API. To learn how to add documents and search using the command-line or an SDK in your preferred language, check out the [Meilisearch quick start](https://www.meilisearch.com/docs/learn/self_hosted/getting_started_with_self_hosted_meilisearch).
