@@ -57,14 +57,7 @@
   "primaryTab": {
     "name": "Documentation"
   },
-  "anchors": [
-    {
-      "name": "API Reference",
-      "url": "referencesapi-reference",
-      "openapi": "/references/api-reference/meilisearch-openapi-source.json",
-      "icon": "square-terminal"
-    }
-  ],
+  "anchors": [],
   "navigation": [
     {
       "group": "Getting Started",
