@@ -68,6 +68,7 @@
     {
       "group": "Getting Started",
       "pages": [
+        "documentation/getting-started/overview",
         "documentation/getting-started/features",
         "documentation/getting-started/principles",
         "documentation/getting-started/first-project",
