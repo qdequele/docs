@@ -54,9 +54,12 @@
       "url": "documentation"
     },
     {
-      "name": "API References",
-      "url": "api-references",
-      "openapi": "/references/api-references/meilisearch-openapi-source.yaml"
+      "name": "References",
+      "url": "references"
+    },
+    {
+      "name": "Guides",
+      "url": "guides"
     },
     {
       "name": "Changelog",
@@ -134,8 +137,22 @@
           "pages": ["documentation/plateform/crawler/overview"]
         },
         {
-          "group": "Security and keys",
-          "pages": ["documentation/plateform/security-and-keys/overview"]
+          "group": "API keys",
+          "pages": [
+            "documentation/plateform/security-and-keys/overview",
+            "documentation/plateform/security-and-keys/security-best-practices",
+            "documentation/plateform/security-and-keys/scoped-keys"
+          ]
+        },
+        {
+          "group": "Multi-tenancy",
+          "pages": [
+            "documentation/plateform/multi-tenancy/overview",
+            "documentation/plateform/multi-tenancy/reference",
+            "documentation/plateform/multi-tenancy/generate-sdk",
+            "documentation/plateform/multi-tenancy/generate-manually",
+            "documentation/plateform/multi-tenancy/generate-third-party"
+          ]
         },
         {
           "group": "Tasks",
@@ -156,6 +173,37 @@
       ]
     },
     {
+      "group": "Best practices",
+      "pages": [
+        {
+          "group": "AI",
+          "pages": [
+            "guides/best-practices/ai/langchain",
+            "guides/best-practices/ai/openai",
+            "guides/best-practices/ai/mistral",
+            "guides/best-practices/ai/cloudflare",
+            "guides/best-practices/ai/voyage",
+            "guides/best-practices/ai/cohere"
+          ]
+        },
+        {
+          "group": "Experience",
+          "pages": ["guides/best-practices/experience/pagination"]
+        },
+        {
+          "group": "Optimization",
+          "pages": [
+            "guides/best-practices/optimization/indexing_best_practices",
+            "guides/best-practices/optimization/improve_relevancy_large_documents"
+          ]
+        },
+        {
+          "group": "Security",
+          "pages": ["guides/best-practices/security/basic_security"]
+        }
+      ]
+    },
+    {
       "group": "Changelog",
       "pages": [
         "changelog/engine",
@@ -165,6 +213,74 @@
           "pages": ["changelog/sdks/javascript"]
         }
       ]
+    },
+    {
+      "group": "API References",
+      "pages": [
+        "references/api-references/overview",
+        {
+          "group": "Indexes",
+          "pages": [
+            "references/api-references/indexes/overview",
+            "references/api-references/indexes/list-indexes",
+            "references/api-references/indexes/get-index",
+            "references/api-references/indexes/create-index",
+            "references/api-references/indexes/update-index",
+            "references/api-references/indexes/delete-index",
+            "references/api-references/indexes/swap-indexes"
+          ]
+        },
+        {
+          "group": "Documents",
+          "pages": [
+            "references/api-references/documents/get-documents",
+            "references/api-references/documents/get-documents-1",
+            "references/api-references/documents/get-one-document",
+            "references/api-references/documents/add-or-replace-documents",
+            "references/api-references/documents/add-or-update-documents",
+            "references/api-references/documents/delete-one-document",
+            "references/api-references/documents/delete-documents",
+            "references/api-references/documents/delete-documents-1",
+            "references/api-references/documents/delete-all-documents"
+          ]
+        },
+        {
+          "group": "Search",
+          "pages": [
+            "references/api-references/search/search",
+            "references/api-references/search/search-1",
+            "references/api-references/search/multi-search",
+            "references/api-references/search/facet-search"
+          ]
+        },
+        {
+          "group": "Tasks",
+          "pages": [
+            "references/api-references/tasks/get-a-task",
+            "references/api-references/tasks/get-all-tasks",
+            "references/api-references/tasks/cancel-tasks",
+            "references/api-references/tasks/delete-tasks"
+          ]
+        },
+        {
+          "group": "Keys",
+          "pages": [
+            "references/api-references/keys/get-an-api-key-from-its-uid-or-key-field",
+            "references/api-references/keys/get-api-keys",
+            "references/api-references/keys/create-an-api-key",
+            "references/api-references/keys/update-an-api-key-specified-by-its-uid-or-key-field",
+            "references/api-references/keys/delete-an-api-key-specified-by-its-uid-or-key-field"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Errors",
+      "pages": ["references/errors/overview", "references/errors/error_codes"]
+    },
+    {
+      "group": "Integrations",
+      "pages": ["references/integrations/javascript/javascript"]
     }
   ],
   "footer": {

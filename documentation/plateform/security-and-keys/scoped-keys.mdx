@@ -1,0 +1,131 @@
+---
+title: "Scoped API Keys"
+description: "Learn how to create and manage scoped API keys in Meilisearch"
+---
+
+# Scoped API Keys
+
+Scoped API keys provide granular control over what actions users can perform and which data they can access in your Meilisearch instance. This guide explains how to create and manage scoped keys for enhanced security.
+
+## Understanding Scoped Keys
+
+Scoped keys allow you to:
+- Restrict actions (search, add documents, delete indexes, etc.)
+- Limit access to specific indexes
+- Set expiration dates for temporary access
+- Combine multiple restrictions for precise control
+
+## Action-Scoped Keys
+
+Action-scoped keys restrict what operations users can perform. Here are the available actions:
+
+- `search`: Perform search operations
+- `documents.add`: Add or update documents
+- `documents.delete`: Delete documents
+- `indexes.create`: Create new indexes
+- `indexes.delete`: Delete indexes
+- `settings.update`: Modify index settings
+
+### Creating Action-Scoped Keys
+
+  ```javascript
+  // Generate a key that only allows search operations
+  const searchOnlyKey = await client.generateKey({
+    description: 'Search only key',
+    actions: ['search'],
+    expiresAt: null
+  })
+  ```
+
+## Index-Scoped Keys
+
+Index-scoped keys restrict access to specific indexes in your Meilisearch instance.
+
+### Single Index Access
+
+  ```javascript
+  // Generate a key for accessing only the 'movies' index
+  const movieIndexKey = await client.generateKey({
+    description: 'Movies index access',
+    indexes: ['movies'],
+    actions: ['search', 'documents.add'],
+    expiresAt: null
+  })
+  ```
+
+### Multiple Index Access
+
+  ```javascript
+  // Generate a key for accessing multiple specific indexes
+  const multiIndexKey = await client.generateKey({
+    description: 'Movies and Books access',
+    indexes: ['movies', 'books'],
+    actions: ['search'],
+    expiresAt: null
+  })
+  ```
+
+## Expiration Keys
+
+You can create temporary API keys by setting an expiration date.
+
+  ```javascript
+  // Generate a key that expires in 24 hours
+  const expiringKey = await client.generateKey({
+    description: 'Temporary access key',
+    actions: ['search'],
+    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+  })
+  ```
+
+## Combining Scopes
+
+You can combine different scopes to create highly specific access controls:
+
+  ```javascript
+  // Generate a key with multiple restrictions
+  const complexKey = await client.generateKey({
+    description: 'Temporary search access to movies index',
+    actions: ['search'],
+    indexes: ['movies'],
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+  })
+  ```
+
+## Best Practices
+
+1. **Principle of Least Privilege**: Only grant the minimum necessary permissions
+2. **Regular Key Rotation**: Periodically generate new keys and revoke old ones
+3. **Meaningful Descriptions**: Use clear descriptions to track key usage
+4. **Expiration for Temporary Access**: Always use expiration dates for temporary access
+5. **Monitor Key Usage**: Regularly audit key usage and revoke unused keys
+
+## Managing Scoped Keys
+
+### Listing Active Keys
+
+  ```javascript
+  // List all active API keys
+  const keys = await client.getKeys()
+  ```
+
+### Revoking Keys
+
+  ```javascript
+  // Revoke a specific API key
+  await client.deleteKey('key_id')
+  ```
+
+## Security Considerations
+
+- Store API keys securely and never expose them in client-side code
+- Use environment variables for key storage in applications
+- Implement key rotation policies
+- Monitor for suspicious activity
+- Revoke compromised keys immediately
+
+## Next Steps
+
+- Learn about [API Key Permissions](/path-to-permissions)
+- Explore [Security Best Practices](/path-to-best-practices)
+- Set up [Key Rotation Policies](/path-to-rotation) 

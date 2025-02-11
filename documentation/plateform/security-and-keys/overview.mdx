@@ -1,4 +1,92 @@
 ---
 title: "Overview"
-description: "Security and keys overview"
+description: "Learn how to secure your Meilisearch project and manage API keys"
 ---
+
+## Securing your project
+
+This guide explains how to secure your Meilisearch project by managing your master key and safely sending requests to the Meilisearch API using API keys.
+
+## Creating the master key
+
+The master key is essential for securing your Meilisearch project. When using Meilisearch Cloud, a master key is automatically generated for each project, ensuring security by default.
+
+You can view your master key in your project overview:
+
+<Frame>
+  <img 
+    src="https://raw.githubusercontent.com/meilisearch/documentation/cloud-master-api-keys/assets/images/security/01-master-api-keys.png" 
+    alt="API keys interface showing Master key, Default Search API Key, and Default Admin API Key" 
+  />
+</Frame>
+
+## Obtaining API keys
+
+When your project is protected, Meilisearch automatically generates two API keys:
+- `Default Search API Key`
+- `Default Admin API Key`
+
+These API keys serve as authorization tokens for secure communication with the Meilisearch API.
+
+### Accessing API keys in Meilisearch Cloud 
+
+Find your API keys in the same section as your master key:
+
+<Frame>
+  <img 
+    src="https://raw.githubusercontent.com/meilisearch/documentation/cloud-master-api-keys/assets/images/security/01-master-api-keys.png" 
+    alt="API keys interface showing Master key, Default Search API Key, and Default Admin API Key" 
+  />
+</Frame>
+
+## Making secure API requests
+
+Once you have your API keys, you can safely query the Meilisearch API by adding them as an `Authorization` bearer token header.
+
+### Admin operations
+
+Use the `Default Admin API Key` for sensitive operations like creating a new index:
+
+<CodeGroup>
+
+  ```bash
+  # Add your admin API requests here
+  ```
+
+  ```python
+  # Add your admin API requests here
+  ```
+
+  ```javascript
+  # Add your admin API requests here
+  ```
+
+</CodeGroup>
+
+### Search operations
+
+Use the `Default Search API Key` for search operations in your indexes:
+
+<CodeGroup>
+
+  ```bash
+  # Add your search API requests here
+  ```
+
+  ```python
+  # Add your search API requests here
+  ```
+
+  ```javascript
+  # Add your search API requests here
+  ```
+
+</CodeGroup>
+
+## Next steps
+
+Now that you've secured your Meilisearch instance with a master key and learned how to use API keys, you can:
+
+- Learn about [Scoped API Keys](/documentation/plateform/security-and-keys/scoped-keys)
+- Review our [Security Best Practices](/documentation/plateform/security-and-keys/security-best-practices)
+- Explore [Multi-tenancy Options](/documentation/plateform/multi-tenancy/generate-sdk)

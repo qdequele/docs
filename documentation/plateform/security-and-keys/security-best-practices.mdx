@@ -1,0 +1,159 @@
+---
+title: "Security Best Practices"
+description: "Learn the best practices for securing your Meilisearch implementation"
+---
+
+# Security Best Practices
+
+Follow these best practices to ensure your Meilisearch implementation remains secure and efficient.
+
+## API Key Management
+
+### Key Generation and Distribution
+
+1. **Principle of Least Privilege**
+   - Generate keys with minimal required permissions
+   - Limit index access to only necessary data
+   - Use time-limited keys when possible
+
+2. **Key Organization**
+   - Use descriptive names for easy tracking
+   - Document key purposes and owners
+   - Maintain an up-to-date key inventory
+
+  ```javascript
+  // Example of well-scoped key creation
+  const searchKey = await client.generateKey({
+    description: 'Product search - Frontend Web App',
+    actions: ['search'],
+    indexes: ['products'],
+    expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days
+  })
+  ```
+
+## Implementation Security
+
+### Client-Side Applications
+
+1. **Key Protection**
+   - Never expose admin keys in client-side code
+   - Use search-only keys for frontend applications
+   - Implement key rotation mechanisms
+
+2. **Request Security**
+   - Validate all search parameters
+   - Implement rate limiting
+   - Use HTTPS for all API calls
+
+  ```javascript
+  // Example of secure client initialization
+  const searchClient = new MeiliSearch({
+    host: 'https://your-instance.com',
+    apiKey: process.env.SEARCH_API_KEY,
+    requestConfig: {
+      timeout: 5000, // Reasonable timeout
+      headers: {
+        'Custom-Header': 'value' // Additional security headers if needed
+      }
+    }
+  })
+  ```
+
+## Monitoring and Maintenance
+
+### Regular Security Audits
+
+1. **Key Usage Monitoring**
+   - Track API key usage patterns
+   - Monitor for unusual activity
+   - Set up alerts for suspicious behavior
+
+2. **Key Rotation Schedule**
+   - Implement regular key rotation (e.g., every 90 days)
+   - Plan for emergency key rotations
+   - Maintain key rotation documentation
+
+### Incident Response
+
+1. **Key Compromise Protocol**
+   - Immediate key revocation process
+   - Backup key activation
+   - Incident documentation requirements
+
+  ```javascript
+  // Example of key revocation
+  async function handleKeyCompromise(compromisedKeyId) {
+    // 1. Create new replacement key
+    const newKey = await client.generateKey({
+      description: 'Emergency replacement key',
+      actions: ['search'],
+      indexes: ['products']
+    })
+    
+    // 2. Revoke compromised key
+    await client.deleteKey(compromisedKeyId)
+    
+    // 3. Log incident
+    await logSecurityIncident({
+      type: 'key_compromise',
+      keyId: compromisedKeyId,
+      newKeyId: newKey.key
+    })
+  }
+  ```
+
+## Environment-Specific Guidelines
+
+### Development Environment
+
+1. **Testing Keys**
+   - Use separate keys for development
+   - Never share development keys
+   - Implement shorter expiration periods
+
+### Production Environment
+
+1. **Key Storage**
+   - Use secure environment variables
+   - Implement secrets management
+   - Regular backup of key information
+
+2. **Access Control**
+   - Limit key access to authorized personnel
+   - Implement role-based access control
+   - Document access procedures
+
+## Documentation and Compliance
+
+### Key Documentation
+
+1. **Required Information**
+   - Key purpose and scope
+   - Associated services/applications
+   - Rotation schedule
+   - Emergency contacts
+
+2. **Compliance Requirements**
+   - Document compliance standards
+   - Regular compliance audits
+   - Update procedures as needed
+
+## Regular Reviews
+
+1. **Quarterly Security Reviews**
+   - Review all active keys
+   - Update documentation
+   - Verify rotation schedules
+   - Check compliance status
+
+2. **Annual Security Assessment**
+   - Comprehensive security audit
+   - Update security policies
+   - Review incident history
+   - Plan security improvements
+
+## Next Steps
+
+- Implement [Key Rotation Policies](/path-to-rotation)
+- Set up [Monitoring Systems](/path-to-monitoring)
+- Review [Compliance Requirements](/path-to-compliance) 

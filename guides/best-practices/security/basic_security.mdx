@@ -1,0 +1,50 @@
+---
+title: Securing your project
+description: This tutorial will show you how to secure your Meilisearch project.
+---
+
+import CreateIndexAdminKey from '/snippets/create-index-admin-key.mdx';
+
+This tutorial will show you how to secure your Meilisearch project. You will see how to manage your API keys and how to safely send requests to the Meilisearch API.
+
+## API keys
+
+Your project comes with three keys:
+- A master key (which you should never use)
+- A `Default Search API Key`
+- A `Default Admin API Key`
+
+You can view these keys in your project overview:
+
+![An interface element named "API keys" showing three obscured keys: "Master key", "Default Search API Key", and "Default Admin API Key"](https://raw.githubusercontent.com/meilisearch/documentation/cloud-master-api-keys/assets/images/security/01-master-api-keys.png)
+
+<Warning>
+**Never use the master key** The master key should only be used to manage API keys. Never use it to perform searches or other operations. Instead, use the appropriate API key as described below.
+</Warning>
+
+## Using API keys securely
+
+API keys are authorization tokens designed to safely communicate with the Meilisearch API. Add them to requests using an `Authorization` bearer token header.
+
+Use the `Default Admin API Key` to perform sensitive operations, such as creating a new index:
+
+<CreateIndexAdminKey />
+
+```bash cURL
+curl \
+  -X POST 'http://localhost:7700/indexes' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer DEFAULT_ADMIN_API_KEY' \
+  --data-binary '{
+    "uid": "medical_records",
+    "primaryKey": "id"
+  }'
+  ```
+
+Then use the `Default Search API Key` to perform search operations in the index you just created:
+
+<CodeSamples id="basic_security_tutorial_search_1" />
+
+## Conclusion
+
+You have successfully learned about securing your Meilisearch project. You saw how to locate your API keys and how to use them to safely access the Meilisearch API by adding them to your request's authorization header.
